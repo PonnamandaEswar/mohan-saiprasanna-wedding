@@ -56,6 +56,7 @@ body{
 .lang-toggle button{border:none;background:transparent;color:#FFEFC0;font-size:11px;font-weight:600;padding:6px 12px;border-radius:999px;cursor:pointer;font-family:'Poppins'}
 .lang-toggle button.active{background:var(--gold2);color:var(--maroon3)}
 
+
 /* ---------- HERO ---------- */
 .hero{background:linear-gradient(180deg,#5C0A1E 0%,#7B1E2B 55%,#8A2438 100%);color:#FFF8E7;text-align:center;padding:28px 20px 0;position:relative;overflow:hidden}
 .hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(241,210,122,.18) 1px, transparent 1px);background-size:22px 22px;opacity:.5}
@@ -171,6 +172,9 @@ body{
 </head>
 <body>
 
+<audio id="weddingMusic" preload="none" loop>
+  <source src="wedding-music.mp3" type="audio/mpeg">
+</audio>
 <canvas id="petals"></canvas>
 
 <!-- ENVELOPE -->
@@ -368,10 +372,21 @@ body{
   g.innerHTML=s;
 })();
 
+// Music autoplay: unmuted autoplay is blocked by many mobile browsers until a user tap.
+// Start it automatically as soon as the guest taps Open Invitation; no music control is shown.
+const weddingMusic=document.getElementById('weddingMusic');
+weddingMusic.volume=.42;
+function startWeddingMusic(){
+  weddingMusic.play().catch(()=>{
+    // If the browser blocks playback or the MP3 is not uploaded, the invitation still works silently.
+  });
+}
+
 // Envelope
 document.getElementById('openBtn').addEventListener('click',()=>{
   document.getElementById('envelope').classList.add('open');
   showToast('🪔 Welcome! You are invited to Mohan ❤️ Sai Prasanna');
+  startWeddingMusic();
   setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),100);
 });
 
